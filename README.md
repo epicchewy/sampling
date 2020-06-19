@@ -1,6 +1,6 @@
 # sampling
 
-This repo offers implementations of a couple of random sampling algorithms -- simple reservoir sampling, slight optimized reservoir sampling, and weighted reservoir sampling. Reservoir sampling is an algorithm that randomly selects *k* samples from a collection of *n* elements and is a technique best used when the collection is large enough to exceed memory limits.
+This repo offers implementations of a couple of random sampling algorithms -- simple reservoir sampling, slightly optimized reservoir sampling, and weighted reservoir sampling. Reservoir sampling is an algorithm that randomly selects *k* samples from a collection of *n* elements and is a technique best used when the collection is large enough to exceed memory limits.
 
 To learn more: check out my [blog post](https://www.lukechui.com/post/reservoir-sampling)!
 
@@ -50,14 +50,14 @@ import "github.com/epicchewy/sampling"
 
 func main() {
     var items []int
-	for i := 0; i < 100; i++ {
-		items = append(items, i)
-	}
+    for i := 0; i < 100; i++ {
+        items = append(items, i)
+    }
 
     // use available iterators or pass in a custom one that implements the Iterator interface
-	itr := sampling.NewIntInterator(items)
-	r := sampling.NewSimpleReservoir(10, itr)
-	samples := r.Sample()
+    itr := sampling.NewIntInterator(items)
+    r := sampling.NewSimpleReservoir(10, itr)
+    samples := r.Sample()
 }
 ```
 
