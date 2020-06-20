@@ -11,27 +11,24 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-// Reservoir represents any of the following reservoirs (simple, normal, weighted)
+// There are three different reservoirs available: simple, slightly optimized simple, and weighted.
 // Each reservoir makes the assumption that the iterator contains more items than the desired samples
 // and that the iterator is not an infinite stream of data.
-type Reservoir interface {
-	Sample() []interface{}
-}
 
-type simpleReservoir struct {
+type SimpleReservoir struct {
 	k int
 	i Iterator
 }
 
 // NewSimpleReservoir ...
-func NewSimpleReservoir(samples int, itr Iterator) Reservoir {
-	return simpleReservoir{
+func NewSimpleReservoir(samples int, itr Iterator) SimpleReservoir {
+	return SimpleReservoir{
 		k: samples,
 		i: itr,
 	}
 }
 
-func (sr simpleReservoir) Sample() []interface{} {
+func (sr SimpleReservoir) Sample() []interface{} {
 	var samples []interface{}
 
 	// load samples with first k elements from iterator
@@ -60,7 +57,7 @@ func (sr simpleReservoir) Sample() []interface{} {
 	return samples
 }
 
-type reservoir struct {
+type Reservoir struct {
 	k int
 	// assume that super set of items can fit in memory
 	i []interface{}
@@ -78,13 +75,13 @@ func NewReservoir(samples int, itr Iterator) Reservoir {
 		items = append(items, item)
 	}
 
-	return reservoir{
+	return Reservoir{
 		k: samples,
 		i: items,
 	}
 }
 
-func (r reservoir) Sample() []interface{} {
+func (r Reservoir) Sample() []interface{} {
 	var samples []interface{}
 
 	// load samples with first k elements from iterator
@@ -107,20 +104,20 @@ func (r reservoir) Sample() []interface{} {
 	return samples
 }
 
-type weightedReservoir struct {
+type WeightedReservoir struct {
 	k int
 	i Iterator
 }
 
 // NewWeightedReservoir ...
-func NewWeightedReservoir(samples int, itr Iterator) Reservoir {
-	return weightedReservoir{
+func NewWeightedReservoir(samples int, itr Iterator) WeightedReservoir {
+	return WeightedReservoir{
 		k: samples,
 		i: itr,
 	}
 }
 
-func (wr weightedReservoir) Sample() []interface{} {
+func (wr WeightedReservoir) Sample() []interface{} {
 	var samples []interface{}
 
 	h := &MinHeap{}
